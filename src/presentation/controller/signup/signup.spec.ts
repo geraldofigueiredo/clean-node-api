@@ -1,8 +1,15 @@
-import { AccountModel } from '../../domand/model/account';
-import { AddAccount, AddAccountModel } from '../../domand/usecases/add-account';
-import { InvalidParamError, MissingParamError, ServerError } from '../errors';
-import { EmailValidator } from '../protocols';
+import {
+  MissingParamError,
+  InvalidParamError,
+  ServerError,
+} from '../../errors';
 import { SignUpController } from './signup';
+import {
+  EmailValidator,
+  AddAccount,
+  AddAccountModel,
+  AccountModel,
+} from './signup-protocols';
 
 interface SutTypes {
   sut: SignUpController;
@@ -158,11 +165,10 @@ describe('SignUp Controller', () => {
   });
 
   it('Should return 500 if EmailValidator throws', () => {
-    const emailValidatorStub = makeEmailValidator();
+    const { sut, emailValidatorStub } = makeSut();
     jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => {
       throw new ServerError();
     });
-    const sut = new SignUpController(emailValidatorStub);
     const httpRequest = {
       body: {
         name: 'any_name',
@@ -178,7 +184,7 @@ describe('SignUp Controller', () => {
 
   it('Should call AddAccount with correct values', () => {
     const { sut, addAccountStub } = makeSut();
-    const addSpy = jest.spyOn(addAccountStub, 'add').mockReturnValueOnce(false);
+    const addSpy = jest.spyOn(addAccountStub, 'add');
     const httpRequest = {
       body: {
         name: 'any_name',
