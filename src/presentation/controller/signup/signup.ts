@@ -1,6 +1,9 @@
-import { ok } from 'assert';
 import { InvalidParamError, MissingParamError } from '../../errors';
-import { HttpBadRequest, HttpServerError } from '../../http-helper';
+import {
+  HttpBadRequest,
+  HttpOkRequest,
+  HttpServerError,
+} from '../../http-helper';
 import {
   Controller,
   EmailValidator,
@@ -44,10 +47,7 @@ export class SignUpController implements Controller {
         email,
         password,
       });
-      return {
-        statusCode: 200,
-        body: account,
-      };
+      return HttpOkRequest(account);
     } catch (error) {
       return HttpServerError();
     }
