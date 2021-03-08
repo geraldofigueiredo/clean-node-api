@@ -1,3 +1,4 @@
+import { ok } from 'assert';
 import { InvalidParamError, MissingParamError } from '../../errors';
 import { HttpBadRequest, HttpServerError } from '../../http-helper';
 import {
@@ -38,11 +39,15 @@ export class SignUpController implements Controller {
       if (!isValid) {
         return HttpBadRequest(new InvalidParamError('email'));
       }
-      this.addAccount.add({
+      const account = this.addAccount.add({
         name,
         email,
         password,
       });
+      return {
+        statusCode: 200,
+        body: account,
+      };
     } catch (error) {
       return HttpServerError();
     }
