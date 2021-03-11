@@ -1,10 +1,9 @@
-import { resolve } from 'node:path';
-import { AccountModel } from '../../../domain/model/account';
 import {
+  AccountModel,
   AddAccount,
   AddAccountModel,
-} from '../../../domain/usecases/add-account';
-import { Encrypter } from '../../protocols/encrypter';
+  Encrypter,
+} from './db-add-account-protocols';
 
 export class DbAddAccount implements AddAccount {
   private readonly encrypter: Encrypter;
